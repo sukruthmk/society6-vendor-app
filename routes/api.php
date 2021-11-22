@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// vendor
+$router->group(['prefix' => 'vendor'], function () use ($router) {
+    $router->get('orders', 'App\Http\Controllers\VendorController@getOrders');
+});

@@ -52,4 +52,6 @@ $app->singleton(
 |
 */
 
+$app->register(XmlResponse\XmlResponseServiceProvider::class);
+
 return $app;
