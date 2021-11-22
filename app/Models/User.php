@@ -10,7 +10,7 @@ class User extends Model
 {
     use HasFactory;
 
-    public function creatives(): HasMany
+    public function creative(): HasMany
     {
         return $this->hasMany('App\Models\Creative');
     }

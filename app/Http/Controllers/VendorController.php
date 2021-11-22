@@ -3,11 +3,12 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Creative;
 use App\Models\Order;
 use App\Services\VendorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class VendorController
@@ -51,7 +52,7 @@ class VendorController extends Controller
                         'country' => $order->country,
                     ],
                     'items' => [
-                        'item' => $this->generateItems($order->items->toArray()),
+                        'item' => $this->generateItems($order->items->toArray(), $order->user->creative),
                     ]
                 ]
             ]
@@ -79,23 +80,26 @@ class VendorController extends Controller
             "buyer_shipping_state" => $order->state,
             "buyer_shipping_postal" => $order->postal_code,
             "buyer_shipping_country" => $order->country,
-            "print_line_items" => $this->generateJsonItems($order->items->toArray())
+            "print_line_items" => $this->generateJsonItems($order->items->toArray(), $order->user->creative)
         ];
     }
 
-    private function generateJsonItems(array $lineItems)
+    private function generateJsonItems(array $lineItems, Collection $creative)
     {
         $items = [];
         foreach ($lineItems as $item) {
             $items['external_ order_line_item_id'] = $item['id'];
             $items['product_id'] = $item['product_id'];
             $items['quantity'] = $item['quantity'];
+            // for the sake of this excersise
+            // lets just assume only one creative exists per user
+            $items['image_url'] = $creative[0]->image_url;
         }
 
         return $items;
     }
 
-    private function generateItems(array $lineItems)
+    private function generateItems(array $lineItems, Collection $creative)
     {
 
         $items = [];
@@ -103,6 +107,9 @@ class VendorController extends Controller
             $items['order_line_item_id'] = $item['id'];
             $items['product_id'] = $item['product_id'];
             $items['quantity'] = $item['quantity'];
+            // for the sake of this excersise
+            // lets just assume only one creative exists per user
+            $items['image_url'] = $creative[0]->image_url;
         }
 
         return $items;

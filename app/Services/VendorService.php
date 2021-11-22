@@ -33,7 +33,7 @@ class VendorService
         $productTypeId = $vendor->productTypes[0]->id;
         $orders
             = Order::with([
-                'user',
+                'user.creative',
                 'items' => function ($q) use ($productTypeId) {
                     $q->where('shipped_at', Null);
                     $q->where('product_id', $productTypeId);
